@@ -75,14 +75,18 @@ if not env.BoardConfig().get("build.ldscript", ""):
 # Target: Build core BSP libraries
 #
 
-unsupported_drivers = ("plic", "timer")
+unsupported_drivers = ("timer")
 
 libs = []
 
 for driver in listdir(join(FRAMEWORK_DIR, "bsp", "drivers")):
     if driver in unsupported_drivers:
         continue
-
+libs.append(
+    env.BuildLibrary(
+        join("$BUILD_DIR", "bsp", "core", target),
+        join(FRAMEWORK_DIR, "bsp", "core", target))
+)
     libs.append(
         env.BuildLibrary(
             join("$BUILD_DIR", "bsp", "drivers", driver),
@@ -91,8 +95,8 @@ for driver in listdir(join(FRAMEWORK_DIR, "bsp", "drivers")):
 
 libs.append(
     env.BuildLibrary(
-        join("$BUILD_DIR", "bsp", "libwrap"),
-        join(FRAMEWORK_DIR, "bsp", "libwrap"))
+        join("$BUILD_DIR", "bsp", "libs"),
+        join(FRAMEWORK_DIR, "bsp", "libs"))
 )
 
 libs.append(
